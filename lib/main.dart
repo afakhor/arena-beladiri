@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 // 1. TAMBAHKAN IMPORT INI
@@ -201,6 +202,45 @@ class _MainNavigationHolderState extends State<MainNavigationHolder> {
         const SnackBar(content: Text('❌ Format kode backup salah atau rusak!')),
       );
     }
+  }
+  // 5. TAMPILKAN DIALOG INPUT IMPOR DATA
+  void _tampilkanDialogInputImpor(BuildContext context) {
+    TextEditingController _controllerTeks = TextEditingController();
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        backgroundColor: const Color(0xFF1E293B),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        title: const Text('Restore Data Atlet', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16)),
+        content: TextField(
+          controller: _controllerTeks,
+          maxLines: 4,
+          style: const TextStyle(color: Colors.white, fontSize: 14),
+          decoration: const InputDecoration(
+            hintText: 'Tempel kode teks cadangan di sini...', 
+            hintStyle: TextStyle(color: Colors.white30),
+            enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white20)),
+            focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFF38BDF8))),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context), 
+            child: const Text('BATAL', style: TextStyle(color: Colors.blueGrey)),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF38BDF8)),
+            onPressed: () {
+              String txt = _controllerTeks.text;
+              Navigator.pop(context);
+              _imporDataBackup(context, txt); // Memicu proses pemulihan data
+            },
+            child: const Text('PROSES', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
