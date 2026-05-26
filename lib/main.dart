@@ -203,7 +203,7 @@ class _MainNavigationHolderState extends State<MainNavigationHolder> {
       );
     }
   }
-  // 5. TAMPILKAN DIALOG INPUT IMPOR DATA
+    // 5. TAMPILKAN DIALOG INPUT IMPOR DATA
   void _tampilkanDialogInputImpor(BuildContext context) {
     TextEditingController _controllerTeks = TextEditingController();
     showDialog(
@@ -217,13 +217,17 @@ class _MainNavigationHolderState extends State<MainNavigationHolder> {
           controller: _controllerTeks,
           maxLines: 4,
           style: const TextStyle(color: Colors.white, fontSize: 14),
-                    decoration: const InputDecoration(
+          decoration: const InputDecoration(
             hintText: 'Tempel kode teks cadangan di sini...', 
             hintStyle: TextStyle(color: Colors.white30),
             enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white30)),
             focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFF38BDF8))),
           ),
-        actions: [
+        ), // <--- TAMBALAN 1: Menutup TextField
+      ), // <--- TAMBALAN 2: Menutup properti content (jika struktur alert lama Anda memisahkannya, tapi standarnya ditutup di sini sebelum actions)
+      
+      // Catatan: Supaya struktur hirarki AlertDialog Anda pas dan sah secara silsilah Flutter:
+      actions: [
           TextButton(
             onPressed: () => Navigator.pop(context), 
             child: const Text('BATAL', style: TextStyle(color: Colors.blueGrey)),
@@ -233,7 +237,7 @@ class _MainNavigationHolderState extends State<MainNavigationHolder> {
             onPressed: () {
               String txt = _controllerTeks.text;
               Navigator.pop(context);
-              _imporDataBackup(context, txt); // Memicu proses pemulihan data
+              _imporDataBackup(context, txt); 
             },
             child: const Text('PROSES', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
           ),
