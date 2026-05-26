@@ -676,17 +676,19 @@ class _MainNavigationHolderState extends State<MainNavigationHolder> {
 
             bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
-        // <-- UBAH onTap MENJADI SEPERTI INI -->
-        onTap: (i) async {
+        // <-- UBAH onTap agar SPLASHED -->
+        onTap: (i) {
+          // 1. Jika Coach mengklik menu yang sama, abaikan (jangan putar animasi)
           if (_currentIndex == i) return; 
 
-          setState(() => _isPageLoading = true); 
-
-          await Future.delayed(const Duration(seconds: 1)); 
-
-          setState(() {
-            _currentIndex = i; 
-            _isPageLoading = false; 
+          // 2. Jalankan transisi sinematik 2 detik melewati gerbang SplashPageRoute
+          Navigator.of(context).push(
+            SplashPageRoute(page: pages[i]), // 'pages' adalah list halaman menu Coach
+          ).then((_) {
+            // 3. Setelah animasi 2 detik selesai, kunci posisi halaman aktif
+            setState(() {
+              _currentIndex = i;
+            });
           });
         },
         backgroundColor: const Color(0xFF1E293B), 
