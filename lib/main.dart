@@ -31,10 +31,161 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: const Color(0xFF0F172A),
         fontFamily: 'Roboto',
       ),
-      home: const MainNavigationHolder(),
+      home: const SplashScreen(),
     );
   }
 }
+
+// ==================================
+//.  KODE SPLASH DIMULAI .
+// ==================================
+
+// 1. HALAMAN SPLASH SCREEN UTAMA (Klik APK -> Muncul 3 Detik)
+class SplashScreen extends StatefulWidget {
+  const SplashScreen({Key? key}) : super(key: key);
+
+  @override
+  _SplashScreenState createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderStateMixin {
+  late AnimationController _animController;
+  late Animation<double> _fadeAnim;
+  late Animation<double> _scaleAnim;
+
+  @override
+  void initState() {
+    super.initState();
+    
+    _animController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1500),
+    );
+
+    _fadeAnim = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _animController, curve: Curves.easeIn),
+    );
+    
+    _scaleAnim = Tween<double>(begin: 0.3, end: 1.0).animate(
+      CurvedAnimation(parent: _animController, curve: Curves.easeOutBack),
+    );
+
+    _animController.forward();
+
+    // Tunggu 3 Detik penuh baru masuk ke Dashboard Utama otomatis
+    Timer(const Duration(seconds: 3), () {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (_) => const MainNavigationHolder()),
+      );
+    });
+  }
+
+  @override
+  void dispose() {
+    _animController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    double lebarHP = MediaQuery.of(context).size.width;
+
+    return Scaffold(
+      backgroundColor: const Color(0xFF0F172A),
+      body: SafeArea(
+        child: Stack(
+          children: [
+            Center(
+              child: FadeTransition(
+                opacity: _fadeAnim,
+                child: ScaleTransition(
+                  scale: _scaleAnim,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        width: lebarHP * 0.70,
+                        height: lebarHP * 0.70,
+                        decoration: const BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage('assets/splash.png'),
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 32),
+                      const Text(
+                        'dibuat oleh Heru Wingchun.Hapki!!!',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Color(0xFF38BDF8),
+                          fontSize: 19,
+                          fontWeight: FontWeight.w900,
+                          letterSpacing: 1.5,
+                          fontStyle: FontStyle.italic,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            Positioned(
+              bottom: 60,
+              left: 0,
+              right: 0,
+              child: Center(
+                child: SizedBox(
+                  width: 120,
+                  child: LinearProgressIndicator(
+                    backgroundColor: const Color(0xFF1E293B),
+                    valueColor: AlwaysStoppedAnimation<Color>(const Color(0xFF38BDF8).withOpacity(0.6)),
+                    minHeight: 2,
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// 2. MESIN ANIMASI TRANSISI ANTAR HALAMAN (Slow-Motion 2 Detik)
+class SplashPageRoute extends PageRouteBuilder {
+  final Widget page;
+
+  SplashPageRoute({required this.page})
+      : super(
+          pageBuilder: (context, animation, secondaryAnimation) => page,
+          transitionDuration: const Duration(milliseconds: 2000),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            
+            var circleScale = Tween<double>(begin: 0.0, end: 1.0).animate(
+              CurvedAnimation(
+                parent: animation,
+                curve: const Interval(0.0, 0.6, curve: Curves.easeOutQuart),
+              ),
+            );
+
+            var boxedFade = Tween<double>(begin: 0.0, end: 1.0).animate(
+              CurvedAnimation(
+                parent: animation,
+                curve: const Interval(0.4, 1.0, curve: Curves.slowMiddle),
+              ),
+            );
+
+            return FadeTransition(
+              opacity: boxedFade,
+              child: ScaleTransition(
+                scale: circleScale,
+                child: child,
+              ),
+            );
+          },
+        );
+}//Akhir dari splash
 
 const List<String> kDaftarKlasifikasiLatihan = [
   "STRENGTH", "ENDURANCE", "SPEED", "COORDINATION", "FLEXIBILITY", "BALANCE", "REACTION TIME", 
