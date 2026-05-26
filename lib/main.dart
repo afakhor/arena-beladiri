@@ -217,13 +217,12 @@ class _MainNavigationHolderState extends State<MainNavigationHolder> {
           controller: _controllerTeks,
           maxLines: 4,
           style: const TextStyle(color: Colors.white, fontSize: 14),
-          decoration: const InputDecoration(
+                    decoration: const InputDecoration(
             hintText: 'Tempel kode teks cadangan di sini...', 
             hintStyle: TextStyle(color: Colors.white30),
-            enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white20)),
+            enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white30)),
             focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFF38BDF8))),
           ),
-        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context), 
