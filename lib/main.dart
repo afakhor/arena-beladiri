@@ -659,29 +659,41 @@ class _MainNavigationHolderState extends State<MainNavigationHolder> {
   setState(() => _daftarMurid.remove(m));
   _simpanKeStorage(); // Agar murid yang dihapus tidak muncul lagi saat buka aplikasi
 },
-        onAdd: () {
-  if (_namaController.text.trim().isEmpty) return;
-  setState(() {
-    // ... (logika cari maxId Coach) ...
-    String nextId = (maxId + 1).toString().padLeft(3, '0');
-    
-    _daftarMurid.add(Murid(
-      id: nextId, 
-      nama: _namaController.text.trim().toUpperCase(),
-      boxData: List.generate(7, (_) => [0, 0, 0, 0, 0, 0]), 
-      radarData: List.generate(10, (_) => 0.0),
-      riwayatLatihanKuantitatif: [], 
-      riwayatLatihanDurasi: [],
-    ));
+                onAdd: () {
+          if (_namaController.text.trim().isEmpty) return;
+          
+          // 1. Definisikan maxId DI LUAR setState agar bisa dibaca di bawahnya
+          int maxId = 0; 
+          
+          setState(() {
+            for (var m in _daftarMurid) {
+              int? cId = int.tryParse(m.id);
+              if (cId != null && cId > maxId) maxId = cId;
+            }
+            
+            // Sekarang nextId aman membaca maxId tanpa eror
+            String nextId = (maxId + 1).toString().padLeft(3, '0');
+            
+            _daftarMurid.add(
+              Murid(
+                id: nextId, 
+                nama: _namaController.text.trim().toUpperCase(), 
+                boxData: List.generate(7, (_) => [0, 0, 0, 0, 0, 0]), 
+                radarData: List.generate(10, (_) => 0.0),
+                riwayatLatihanKuantitatif: [], // Kantong riwayat kuantitatif baru
+                riwayatLatihanDurasi: [],      // Kantong riwayat durasi baru
+              )
+            );
 
-    // TAMBAHKAN BARIS INI COACH:
-    _selectedMuridId = nextId; // Agar dashboard langsung otomatis mengarah ke murid baru ini
-    _currentIndex = 0;         // Opsional: Jika ingin langsung lompat ke halaman Dashboard
-  });
-  
-  _namaController.clear();
-  _simpanKeStorage(); 
-},
+            // Langsung kunci agar dashboard otomatis mengarah ke murid baru ini
+            _selectedMuridId = nextId; 
+          });
+          
+          _namaController.clear();
+          
+          // Kunci permanen ke memori HP Coach
+          _simpanKeStorage(); 
+        },
 
          onEkspor: () => _eksporDataBackup(context),
          onImpor: () => _tampilkanDialogInputImpor(context),
