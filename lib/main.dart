@@ -82,10 +82,10 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
 
     _animController.forward();
 
-    // Tunggu 3 Detik penuh baru masuk ke Dashboard Utama otomatis
-    Timer(const Duration(seconds: 3), () {
+    // SINKRONISASI: Kita buat pas 2 detik (2000 milidetik) agar pas dengan routernya!
+    Timer(const Duration(milliseconds: 2000), () {
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => const MainNavigationHolder()),
+        SplashPageRoute(page: const MainNavigationHolder()), // Menggunakan router keren Coach
       );
     });
   }
@@ -99,9 +99,8 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
   @override
   Widget build(BuildContext context) {
     double lebarHP = MediaQuery.of(context).size.width;
-
     return Scaffold(
-      backgroundColor: const Color(0xFF0F172A),
+      backgroundColor: const Color(0xFFF8FAFC), // SAKELAR TERANG: Selaras dengan tema baru
       body: SafeArea(
         child: Stack(
           children: [
@@ -128,7 +127,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                         'dibuat oleh Heru Wingchun.Hapki!!!',
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          color: Color(0xFF38BDF8),
+                          color: Color(0xFF0284C7), // Ubah jadi Biru Tajam agar terbaca di latar terang
                           fontSize: 19,
                           fontWeight: FontWeight.w900,
                           letterSpacing: 1.5,
@@ -148,8 +147,8 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                 child: SizedBox(
                   width: 120,
                   child: LinearProgressIndicator(
-                    backgroundColor: const Color(0xFF1E293B),
-                    valueColor: AlwaysStoppedAnimation<Color>(const Color(0xFF38BDF8).withOpacity(0.6)),
+                    backgroundColor: const Color(0xFFE2E8F0), // Loading track abu terang
+                    valueColor: AlwaysStoppedAnimation<Color>(const Color(0xFF0284C7).withOpacity(0.6)), // Loading bar biru
                     minHeight: 2,
                   ),
                 ),
@@ -169,33 +168,47 @@ class SplashPageRoute extends PageRouteBuilder {
   SplashPageRoute({required this.page})
       : super(
           pageBuilder: (context, animation, secondaryAnimation) => page,
-          transitionDuration: const Duration(milliseconds: 2000),
+          transitionDuration: const Duration(milliseconds: 2000), // Sinkron 2 detik
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             
-            var circleScale = Tween<double>(begin: 0.0, end: 1.0).animate(
-              CurvedAnimation(
-                parent: animation,
-                curve: const Interval(0.0, 0.6, curve: Curves.easeOutQuart),
-              ),
+            var gerakanSirkular = Tween<double>(begin: 0.0, end: 1.0).animate(
+              CurvedAnimation(parent: animation, curve: const Interval(0.0, 0.5, curve: Curves.easeOutQuart)),
+            );
+            var memudarKeluar = Tween<double>(begin: 0.0, end: 1.0).animate(
+              CurvedAnimation(parent: animation, curve: const Interval(0.5, 1.0, curve: Curves.slowMiddle)),
             );
 
-            var boxedFade = Tween<double>(begin: 0.0, end: 1.0).animate(
-              CurvedAnimation(
-                parent: animation,
-                curve: const Interval(0.4, 1.0, curve: Curves.slowMiddle),
-              ),
-            );
+            double lebarHP = MediaQuery.of(context).size.width;
 
-            return FadeTransition(
-              opacity: boxedFade,
-              child: ScaleTransition(
-                scale: circleScale,
-                child: child,
-              ),
+            return Stack(
+              children: [
+                FadeTransition(opacity: memudarKeluar, child: child),
+                
+                IgnorePointer(
+                  child: FadeTransition(
+                    opacity: Tween<double>(begin: 1.0, end: 0.0).animate(
+                      CurvedAnimation(parent: animation, curve: const Interval(0.4, 0.8, curve: Curves.easeIn)),
+                    ),
+                    child: Container(
+                      color: const Color(0xFFF8FAFC), // SAKELAR TERANG: Mengubah lapisan transisi menjadi terang bersih
+                      child: Center(
+                        child: ScaleTransition(
+                          scale: gerakanSirkular,
+                          child: Image.asset(
+                            'assets/splash.png', 
+                            width: lebarHP * 0.45, 
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             );
           },
         );
-}//Akhir dari splash
+}//akhir dari splash 
 
 const List<String> kDaftarKlasifikasiLatihan = [
   "STRENGTH", "ENDURANCE", "SPEED", "COORDINATION", "FLEXIBILITY", "BALANCE", "REACTION TIME", 
