@@ -26,10 +26,20 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Papan Performa Member',
-      theme: ThemeData(
-        brightness: Brightness.dark,
-        scaffoldBackgroundColor: const Color(0xFF0F172A),
+            theme: ThemeData(
+        brightness: Brightness.light, // Ubah dari dark ke light agar latar jadi terang
+        scaffoldBackgroundColor: const Color(0xFFF8FAFC), // Warna abu-abu sangat muda (Slate 50) agar teks kontras
+        cardColor: Colors.white, // Kartu metrik menjadi putih bersih
         fontFamily: 'Roboto',
+        textTheme: const TextTheme(
+          bodyLarge: TextStyle(color: Color(0xFF1E293B)), // Tulisan utama abu-abu gelap tajam
+          bodyMedium: TextStyle(color: Color(0xFF475569)), // Tulisan pendukung abu-abu sedang
+        ),
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Color(0xFFF8FAFC),
+          elevation: 0,
+          titleTextStyle: TextStyle(color: Color(0xFF1E293B), fontWeight: FontWeight.bold),
+        ),
       ),
       home: const SplashScreen(),
     );
