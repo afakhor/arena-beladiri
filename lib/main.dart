@@ -655,20 +655,33 @@ class _MainNavigationHolderState extends State<MainNavigationHolder> {
         daftarMurid: filtered, selectedId: _selectedMuridId, namaController: _namaController, searchController: _searchController,
         onSearchChanged: (v) => setState(() => _searchQuery = v),
         onSelect: (id) => setState(() { _selectedMuridId = id; _currentIndex = 0; }), 
-        onDelete: (m) => setState(() => _daftarMurid.remove(m)),
+        onDelete: (m) {
+  setState(() => _daftarMurid.remove(m));
+  _simpanKeStorage(); // Agar murid yang dihapus tidak muncul lagi saat buka aplikasi
+},
         onAdd: () {
-          if (_namaController.text.trim().isEmpty) return;
-          setState(() {
-            int maxId = 0;
-            for (var m in _daftarMurid) {
-              int? cId = int.tryParse(m.id);
-              if (cId != null && cId > maxId) maxId = cId;
-            }
-            String nextId = (maxId + 1).toString().padLeft(3, '0');
-            _daftarMurid.add(Murid(id: nextId, nama: _namaController.text.trim().toUpperCase(), boxData: List.generate(7, (_) => [0, 0, 0, 0, 0, 0]), radarData: List.generate(10, (_) => 0.0)));
-          });
-          _namaController.clear();
-        },
+  if (_namaController.text.trim().isEmpty) return;
+  setState(() {
+    // ... (logika cari maxId Coach) ...
+    String nextId = (maxId + 1).toString().padLeft(3, '0');
+    
+    _daftarMurid.add(Murid(
+      id: nextId, 
+      nama: _namaController.text.trim().toUpperCase(),
+      boxData: List.generate(7, (_) => [0, 0, 0, 0, 0, 0]), 
+      radarData: List.generate(10, (_) => 0.0),
+      riwayatLatihanKuantitatif: [], 
+      riwayatLatihanDurasi: [],
+    ));
+
+    // TAMBAHKAN BARIS INI COACH:
+    _selectedMuridId = nextId; // Agar dashboard langsung otomatis mengarah ke murid baru ini
+    _currentIndex = 0;         // Opsional: Jika ingin langsung lompat ke halaman Dashboard
+  });
+  
+  _namaController.clear();
+  _simpanKeStorage(); 
+},
 
          onEkspor: () => _eksporDataBackup(context),
          onImpor: () => _tampilkanDialogInputImpor(context),
