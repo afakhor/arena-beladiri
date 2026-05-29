@@ -267,8 +267,34 @@ class _MainNavigationHolderState extends State<MainNavigationHolder> {
     await prefs.setString('data_atlet_coach', jsonString);
     print("Data berhasil dikunci ke memori HP!");
   }
+// 2. EDIT FUNGSI SIMPAN LATIHAN KUNCI MATI SIMPANSTORAGE (Anti-Bocor)
+  void _simpanHasilLatihan(String idTerpilih, String jenis, String klas, double nilai, double sets, String tipe, DateTime tgl) {
+    setState(() {
+      // CARI MURID BERDASARKAN ID (Sembuhkan masalah lari ke murid pertama)
+      final index = _daftarMurid.indexWhere((m) => m.id == idTerpilih);
+      
+      if (index != -1) {
+        final dataBaru = {
+          'tanggal': tgl,
+          'jenis': jenis,
+          'klasifikasi': klas,
+          'skor': nilai,
+          'isReps': true, // Sesuaikan true untuk Reps, false untuk Waktu
+          'tipePembagi': tipe,
+        };
 
-  // 2. FUNGSI MEMANGGIL DATA SETIAP KALI APLIKASI BARU DIBUKA
+        if (dataBaru['isReps'] == true) {
+          _daftarMurid[index].riwayatLatihanKuantitatif.add(dataBaru);
+        } else {
+          _daftarMurid[index].riwayatLatihanDurasi.add(dataBaru);
+        }
+      }
+    });
+    
+    // KUNCI MATI: Langsung simpan ke memori fisik HP
+    _simpanKeStorage(); 
+  }
+  // 3. FUNGSI MEMANGGIL DATA SETIAP KALI APLIKASI BARU DIBUKA
   Future<void> _muatDataDariStorage() async {
     final prefs = await SharedPreferences.getInstance();
     String? jsonString = prefs.getString('data_atlet_coach');
@@ -316,7 +342,7 @@ class _MainNavigationHolderState extends State<MainNavigationHolder> {
   }
 
 
-  // 3. FUNGSI EKSPOR: MENYALIN DATABASE KE CLIPBOARD HP
+  // 4. FUNGSI EKSPOR: MENYALIN DATABASE KE CLIPBOARD HP
   Future<void> _eksporDataBackup(BuildContext context) async {
     final prefs = await SharedPreferences.getInstance();
     String? jsonString = prefs.getString('data_atlet_coach');
@@ -333,7 +359,7 @@ class _MainNavigationHolderState extends State<MainNavigationHolder> {
     }
   }
 
-  // 4. FUNGSI IMPOR: MENERIMA TEMPELAN TEKS DAN MEMULIHKAN DATABASE
+  // 5. FUNGSI IMPOR: MENERIMA TEMPELAN TEKS DAN MEMULIHKAN DATABASE
   Future<void> _imporDataBackup(BuildContext context, String teksBackup) async {
     try {
       if (teksBackup.trim().isEmpty) return;
@@ -354,7 +380,7 @@ class _MainNavigationHolderState extends State<MainNavigationHolder> {
       );
     }
   }
-        // 5. TAMPILKAN DIALOG INPUT IMPOR DATA
+        // 6. TAMPILKAN DIALOG INPUT IMPOR DATA
   void _tampilkanDialogInputImpor(BuildContext context) {
     TextEditingController _controllerTeks = TextEditingController();
     showDialog(
