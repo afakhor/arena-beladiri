@@ -1217,49 +1217,119 @@ class TimelineHistoryPage extends StatelessWidget {
     allHistory.sort((a, b) => (b['tanggal'] as DateTime).compareTo(a['tanggal'] as DateTime));
 
     return Scaffold(
-      backgroundColor: const Color(0xFF0F172A),
-      appBar: AppBar(title: Text("HISTORY TIMELINE: ${activeMurid.nama}", style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold)), backgroundColor: const Color(0xFF1E293B), centerTitle: true),
-      body: allHistory.isEmpty
-          ? const Center(child: Text("Belum ada riwayat latihan manual.", style: TextStyle(color: Colors.white54)))
-          : ListView.builder(
+      backgroundColor: const Color(0xFFF8FAFC), // TERANG: Latar belakang Slate 50
+      appBar: AppBar(
+        title: const Text("TIMELINE PERFORMA", style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Color(0xFF1E293B))), 
+        backgroundColor: const Color(0xFFF8FAFC), 
+        elevation: 0,
+        centerTitle: true,
+        iconTheme: const IconThemeData(color: Color(0xFF1E293B)), // Panah back warna gelap
+      ),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // ================= KARTU NAMA ATLET (BIAR MUNCUL JELAS & GAGAH) =================
+            Container(
+              width: double.infinity,
               padding: const EdgeInsets.all(16),
-              itemCount: allHistory.length,
-              itemBuilder: (context, index) {
-                final item = allHistory[index];
-                final bool isReps = item['isReps'] ?? true;
-                return Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Column(children: [
-                      Container(width: 12, height: 12, decoration: BoxDecoration(color: isReps ? Colors.cyan : Colors.orange, shape: BoxShape.circle)),
-                      Container(width: 2, height: 70, color: Colors.blueGrey.withOpacity(0.3)),
-                    ]),
-                    const SizedBox(width: 15),
-                    Expanded(
-                      child: Container(
-                        margin: const EdgeInsets.only(bottom: 15),
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFF1E293B),
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: const Color(0xFF334155)),
-                        ),
-                        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                            Text(item['klasifikasi'], style: TextStyle(color: isReps ? Colors.cyan : Colors.orange, fontWeight: FontWeight.bold, fontSize: 11)),
-                            Text(_formatTanggalManual(item['tanggal']), style: const TextStyle(color: Colors.white38, fontSize: 10)),
-                          ]),
-                          const Divider(color: Colors.white10),
-                          Text(item['jenis'].toString().toUpperCase(), style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
-                          const SizedBox(height: 5),
-                          Text("Capaian: ${item['skor'].toStringAsFixed(0)} ${isReps ? 'Reps' : 'Detik'}", style: const TextStyle(fontSize: 12, color: Color(0xFF10B981))),
-                        ]),
-                      ),
+              margin: const EdgeInsets.only(bottom: 16),
+              decoration: BoxDecoration(
+                color: Colors.white, // Kartu Putih Bersih
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: const Color(0xFFE2E8F0)), // Garis tepi tipis abu-abu
+                boxShadow: [
+                  BoxShadow(color: Colors.black.withOpacity(0.02), blurRadius: 6, offset: const Offset(0, 3)),
+                ],
+              ),
+              child: Row(
+                children: [
+                  CircleAvatar(
+                    backgroundColor: const Color(0xFF0284C7), // Biru Taktis
+                    child: Text(
+                      activeMurid.id, 
+                      style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                     ),
-                  ],
-                );
-              },
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          "NAMA ATLET BE-LA DIRI",
+                          style: TextStyle(fontSize: 10, color: Color(0xFF64748B), fontWeight: FontWeight.bold, letterSpacing: 1),
+                        ),
+                        Text(
+                          activeMurid.nama.toUpperCase(), // NAMA JELAS DI SINI Coach!
+                          style: const TextStyle(fontSize: 18, color: Color(0xFF1E293B), fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
+
+            // ================= LIST TIMELINE =================
+            Expanded(
+              child: allHistory.isEmpty
+                  ? const Center(child: Text("Belum ada riwayat latihan manual.", style: TextStyle(color: Color(0xFF64748B))))
+                  : ListView.builder(
+                      padding: const EdgeInsets.only(top: 8, bottom: 16),
+                      itemCount: allHistory.length,
+                      itemBuilder: (context, index) {
+                        final item = allHistory[index];
+                        final bool isReps = item['isReps'] ?? true;
+                        
+                        // Warna Kontras Baru untuk Latar Terang
+                        final Color warnaAksen = isReps ? const Color(0xFF0284C7) : const Color(0xFFEA580C); // Biru Laut / Oranye Tajam
+
+                        return Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Column(children: [
+                              Container(width: 12, height: 12, decoration: BoxDecoration(color: warnaAksen, shape: BoxShape.circle)),
+                              Container(width: 2, height: 80, color: const Color(0xFFCBD5E1)), // Garis timeline abu-abu solid terang
+                            ]),
+                            const SizedBox(width: 15),
+                            Expanded(
+                              child: Container(
+                                margin: const EdgeInsets.only(bottom: 15),
+                                padding: const EdgeInsets.all(12),
+                                decoration: BoxDecoration(
+                                  color: Colors.white, // Kartu latihan putih bersih
+                                  borderRadius: BorderRadius.circular(10),
+                                  border: Border.all(color: const Color(0xFFE2E8F0)),
+                                  boxShadow: [
+                                    BoxShadow(color: Colors.black.withOpacity(0.01), blurRadius: 4, offset: const Offset(0, 2)),
+                                  ],
+                                ),
+                                child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                                  Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                                    Text(item['klasifikasi'], style: TextStyle(color: warnaAksen, fontWeight: FontWeight.bold, fontSize: 11)),
+                                    Text(_formatTanggalManual(item['tanggal']), style: const TextStyle(color: Color(0xFF64748B), fontSize: 10, fontWeight: FontWeight.w500)),
+                                  ]),
+                                  const Divider(color: Color(0xFFF1F5F9), height: 16),
+                                  Text(item['jenis'].toString().toUpperCase(), style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Color(0xFF1E293B))),
+                                  const SizedBox(height: 6),
+                                  // Hijau Emerald mantap untuk Capaian Skor
+                                  Text(
+                                    "Capaian: ${item['skor'].toStringAsFixed(0)} ${isReps ? 'Reps' : 'Detik'}", 
+                                    style: const TextStyle(fontSize: 13, color: Color(0xFF16A34A), fontWeight: FontWeight.bold)
+                                  ),
+                                ]),
+                              ),
+                            ),
+                          ],
+                        );
+                      },
+                    ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
