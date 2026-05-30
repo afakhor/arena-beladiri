@@ -2,13 +2,19 @@
     <application
         android:label="arena_beladiri"
         android:icon="@mipmap/ic_launcher">
-    </application>
-<receiver android:name=".MyWidgetProvider" android:exported="true">
-    <intent-filter>
-        <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-    </intent-filter>
-    <meta-data
-        android:name="android.appwidget.provider"
-        android:resource="@xml/widget_info" />
-</receiver>
+
+        <!-- Kode Widget ditaruh di dalam sini (sebelum penutup application) -->
+        <receiver 
+            android:name=".MyWidgetProvider" 
+            android:exported="true"
+            android:label="Arena beladiri Wingchun.Hapki"> <!-- Nama ini yang muncul di menu widget HP -->
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_info" />
+        </receiver>
+
+    </application> <!-- Penutup application ada di bawah receiver -->
 </manifest>
