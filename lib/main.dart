@@ -23,56 +23,47 @@ void main() {
 }
 
 // --- INI CLASS BARU UNTUK HOMESCREEN WIDGET ---
-class ArenaBeladiriApp extends StatefulWidget {
-  @override
-  _ArenaBeladiriAppState createState() => _ArenaBeladiriAppState();
-}
-
 class _ArenaBeladiriAppState extends State<ArenaBeladiriApp> {
-  // Tempat menyimpan data 20 murid (contoh skor push-up)
+  // Data 20 murid Coach (misal: skor push-up)
   List<double> dataMurid = List.filled(20, 0.0); 
 
-  // Fungsi untuk update tampilan di layar depan HP Coach
-Future<void> updateCoachDashboard(dynamic dataMurid) async {
-  // 1. Logika pembuatan grafik Boxplot & Radar di sini 
-  // (Nantinya dikonversi ke file gambar .png)
-  
-  // 2. Kirim ke wadah 'img_boxplot' yang kita buat di XML tadi
-  await HomeWidget.renderFlutterWidget(
-    BoxPlotGrafik(data: dataMurid), // Widget Flutter Coach
-    key: 'img_boxplot',
-    logicalSize: const Size(400, 400),
-  );
+  // PINDAHKAN: Fungsi ini sekarang ada di dalam State agar bisa dipanggil tombol
+  Future<void> jalankanUpdateDashboard() async {
+    // 1. Simpan judul atau teks tambahan jika perlu
+    await HomeWidget.saveWidgetData('judul_dashboard', 'Monitoring 20 Murid');
 
-  // 3. Kirim ke wadah 'img_radar'
-  await HomeWidget.renderFlutterWidget(
-    RadarGrafik(data: dataMurid),
-    key: 'img_radar',
-    logicalSize: const Size(400, 400),
-  );
+    // 2. Kirim grafik Boxplot ke sisi kiri widget
+    await HomeWidget.renderFlutterWidget(
+      BoxPlotGrafik(data: dataMurid), 
+      key: 'img_boxplot', // Sesuai dengan ID di XML kita tadi
+      logicalSize: const Size(400, 400),
+    );
 
-  // 4. Perintahkan Home Screen untuk update tampilan
-  await HomeWidget.updateWidget(
-    name: 'MyWidgetProvider',
-    androidName: 'MyWidgetProvider',
-  );
-}
+    // 3. Kirim grafik Radar ke sisi kanan widget
+    await HomeWidget.renderFlutterWidget(
+      RadarGrafik(data: dataMurid),
+      key: 'img_radar', // Sesuai dengan ID di XML kita tadi
+      logicalSize: const Size(400, 400),
+    );
 
-  void updateWidget() async {
-    await HomeWidget.saveWidgetData('judul_dashboard', 'Data 20 Murid');
-    await HomeWidget.updateWidget(name: 'MyWidgetProvider');
+    // 4. Perintahkan sistem Android untuk merefresh tampilan Dashboard
+    await HomeWidget.updateWidget(
+      name: 'MyWidgetProvider',
+      androidName: 'MyWidgetProvider',
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Monitoring Murid Coach")),
+      appBar: AppBar(title: Text("PAPAN PERFORMA BIOMOTORIK")),
       body: Center(
-        child: Text("Halaman Input Data 20 Murid"),
+        child: Text("Data Terinput: ${dataMurid.length} Murid"),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: updateWidget, // Klik untuk kirim data ke Home Screen
-        child: Icon(Icons.refresh),
+        // GANTI: Panggil fungsi update dashboard di sini
+        onPressed: () => jalankanUpdateDashboard(), 
+        child: Icon(Icons.sync), // Ikon sinkronisasi
       ),
     );
   }
