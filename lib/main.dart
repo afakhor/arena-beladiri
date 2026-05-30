@@ -34,14 +34,14 @@ class _ArenaBeladiriAppState extends State<ArenaBeladiriApp> {
 
     // 2. Kirim grafik Boxplot ke sisi kiri widget
     await HomeWidget.renderFlutterWidget(
-      BoxPlotGrafik(data: dataMurid), 
+      MetaBoxplotChart(data: dataMurid), 
       key: 'img_boxplot', // Sesuai dengan ID di XML kita tadi
       logicalSize: const Size(400, 400),
     );
 
     // 3. Kirim grafik Radar ke sisi kanan widget
     await HomeWidget.renderFlutterWidget(
-      RadarGrafik(data: dataMurid),
+      MetaRadarChart(data: dataMurid),
       key: 'img_radar', // Sesuai dengan ID di XML kita tadi
       logicalSize: const Size(400, 400),
     );
@@ -864,7 +864,7 @@ Widget build(BuildContext context) {
       // BAGIAN ATAS: Terang (Slate Clean)
       backgroundColor: const Color(0xFFF8FAFC), 
       title: const Text(
-        "TIMELINE PERFORMA", 
+        PAPAN PERFORMA", 
         style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Color(0xFF1E293B))
       ), 
       elevation: 0,
@@ -933,7 +933,13 @@ Widget build(BuildContext context) {
                     ],
                   ),
                   const SizedBox(height: 16),
-                  SizedBox(height: 250, child: MetaBoxplotChart(boxData: activeMurid.boxData, teamAverages: teamBoxAverages)),
+                  SizedBox(
+  height: 250, 
+  child: MetaBoxplotChart(
+    boxData: activeMurid.boxData, 
+    teamAverages: teamBoxAverages,
+  ),
+),
                 ],
               ),
             ),
@@ -961,10 +967,19 @@ Widget build(BuildContext context) {
                     ],
                   ),
                   const SizedBox(height: 12),
-                  SizedBox(
-                    height: 240,
-                    child: CustomPaint(
-                      size: const Size(double.infinity, 240),
+                  METRIKS RADAR (10 DIMENSI)',
+                        style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Color(0xFF22C55E)),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+  SizedBox(
+  height: 320, // Dinaikkan sedikit agar muat dengan teks legenda di bawahnya
+  child: MetaRadarChart(
+    dataIndividu: activeMurid.radarData, 
+    rataRataTim: teamRadarAverages,
+  ),
+),
                       painter: MetaRadarChartPainter(activeRadar: activeMurid.radarData, teamRadar: teamRadarAverages),
                     ),
                   ),
