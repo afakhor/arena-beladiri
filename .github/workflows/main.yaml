@@ -1,60 +1,43 @@
-#name: Build
-#on:
-  #push:
-    #branches: [main, master]
-  #workflow_dispatch:
-#jobs:
-  #build:
-    #runs-on: ubuntu-latest
-    #steps:
-    #- uses: actions/checkout@v4
-    #- uses: actions/setup-java@v4
-      #with:
-        #distribution: zulu
-        #java-version: 17
-    #- uses: subosito/flutter-action@v2
-      #with:
-        #channel: stable
-    #- run: flutter pub get
-    #- name: Repair Missing Android Files
-      #run: flutter create . --platforms=android
-    #- name: Set Android App Name
-      #run: |
-        #dart run rename setAppName \
-        #--value "Arena Beladiri" \
-        #--targets android
-    #- name: Set Android Bundle ID
-      #run: |
-        #dart run rename setBundleId \
-        #--value "com.bskrwingchun.hpki" \
-        #--targets android
-    #- run: |
-        #dart run \
-        #flutter_launcher_icons
-    #- run: |
-        #dart run \
-        #flutter_native_splash:create
-    - run: flutter build apk --release
-    #- run: |
-        #cd build/app/outputs/flutter-apk
-        #cp app-release.apk $GITHUB_WORKSPACE
-    - uses: actions/upload-artifact@v4
-      with:
-        name: Arena-Beladiri-APK
-        path: app-release.apk
-#cara edit widget home screen widget
-# 1. Masuk ke folder proyek Coach (sesuaikan nama foldernya jika berbeda)
-cd arena-beladiri
+name: Build and Release APK
 
-# 2. Perintah untuk membuat ulang semua folder native (Android, iOS, dll)
-flutter create .
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
-# 3. Masukkan folder android yang baru dibuat ke sistem git
-git add android/
+jobs:
+  build:
+    runs-on: ubuntu-latest
 
-# 4. Simpan perubahannya
-git commit -m "Memunculkan folder native Android untuk widget"
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-# 5. Kirim (push) langsung ke GitHub Coach
-git push origin main
+      - name: Setup Java JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
 
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+
+      - name: Install Dependencies
+        run: flutter pub get
+
+      - name: Generate Android Folder
+        run: flutter create . --platforms=android
+
+      - name: Build APK
+        run: flutter build apk --release
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Arena-Beladiri-APK
+          path: build/app/outputs/flutter-apk/app-release.apk
