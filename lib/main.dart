@@ -4,8 +4,14 @@ import 'dart:math' as math;
 // 1. TAMBAHKAN IMPORT INI
 import 'package:flutter_native_splash/flutter_native_splash.dart'; 
 import 'dart:async';
+//untuk simpan
 import 'dart:convert';//taruh do atas paketshared
 import 'package:shared_preferences/shared_preferences.dart';
+//untuk homescreen widget
+import 'package:home_widget/home_widget.dart';
+import 'package:path_provider/path_provider.dart';
+import 'dart:io';
+
 
 
 void main() {
@@ -16,7 +22,61 @@ void main() {
 
 }
 
+// --- INI CLASS BARU UNTUK HOMESCREEN WIDGET ---
+class ArenaBeladiriApp extends StatefulWidget {
+  @override
+  _ArenaBeladiriAppState createState() => _ArenaBeladiriAppState();
+}
 
+class _ArenaBeladiriAppState extends State<ArenaBeladiriApp> {
+  // Tempat menyimpan data 20 murid (contoh skor push-up)
+  List<double> dataMurid = List.filled(20, 0.0); 
+
+  // Fungsi untuk update tampilan di layar depan HP Coach
+Future<void> updateCoachDashboard(dynamic dataMurid) async {
+  // 1. Logika pembuatan grafik Boxplot & Radar di sini 
+  // (Nantinya dikonversi ke file gambar .png)
+  
+  // 2. Kirim ke wadah 'img_boxplot' yang kita buat di XML tadi
+  await HomeWidget.renderFlutterWidget(
+    BoxPlotGrafik(data: dataMurid), // Widget Flutter Coach
+    key: 'img_boxplot',
+    logicalSize: const Size(400, 400),
+  );
+
+  // 3. Kirim ke wadah 'img_radar'
+  await HomeWidget.renderFlutterWidget(
+    RadarGrafik(data: dataMurid),
+    key: 'img_radar',
+    logicalSize: const Size(400, 400),
+  );
+
+  // 4. Perintahkan Home Screen untuk update tampilan
+  await HomeWidget.updateWidget(
+    name: 'MyWidgetProvider',
+    androidName: 'MyWidgetProvider',
+  );
+}
+
+  void updateWidget() async {
+    await HomeWidget.saveWidgetData('judul_dashboard', 'Data 20 Murid');
+    await HomeWidget.updateWidget(name: 'MyWidgetProvider');
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text("Monitoring Murid Coach")),
+      body: Center(
+        child: Text("Halaman Input Data 20 Murid"),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: updateWidget, // Klik untuk kirim data ke Home Screen
+        child: Icon(Icons.refresh),
+      ),
+    );
+  }
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
