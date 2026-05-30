@@ -19,9 +19,8 @@ jobs:
     - name: Install Dependencies
       run: flutter pub get
 
-    # KITA MATIKAN 'flutter create' agar file widget Coach tidak hilang
-    # - name: Repair Missing Android Files
-    #   run: flutter create . --platforms=android
+    - name: Repair Missing Android Files
+      run: flutter create . --platforms=android
 
     # Pastikan Package Name sesuai dengan folder java kita tadi
     - name: Set Android Bundle ID
