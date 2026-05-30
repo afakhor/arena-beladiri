@@ -804,9 +804,23 @@ class DashboardAtletPage extends StatelessWidget {
 
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFF0F172A), 
+Widget build(BuildContext context) {
+  return Scaffold(
+    // BAGIAN BAWAH: Gelap (Navy Deep)
+    backgroundColor: const Color(0xFF0F172A), 
+    
+    appBar: AppBar(
+      // BAGIAN ATAS: Terang (Slate Clean)
+      backgroundColor: const Color(0xFFF8FAFC), 
+      title: const Text(
+        "TIMELINE PERFORMA", 
+        style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Color(0xFF1E293B))
+      ), 
+      elevation: 0,
+      centerTitle: true,
+      // PANAH BACK: Terlihat jelas di latar terang
+      iconTheme: const IconThemeData(color: Color(0xFF1E293B)), 
+    ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -1363,9 +1377,23 @@ class DaftarMuridPage extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFF0F172A),
+Widget build(BuildContext context) {
+  return Scaffold(
+    // BAGIAN BAWAH: Gelap (Navy Deep)
+    backgroundColor: const Color(0xFF0F172A), 
+    
+    appBar: AppBar(
+      // BAGIAN ATAS: Terang (Slate Clean)
+      backgroundColor: const Color(0xFFF8FAFC), 
+      title: const Text(
+        "LIST NEW/MEMBER", 
+        style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Color(0xFF1E293B))
+      ), 
+      elevation: 0,
+      centerTitle: true,
+      // PANAH BACK: Terlihat jelas di latar terang
+      iconTheme: const IconThemeData(color: Color(0xFF1E293B)), 
+    ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -1476,10 +1504,25 @@ class _InputLatihanKuantitatifPageState extends State<InputLatihanKuantitatifPag
   String _selectedTipePembagi = 'J'; // Default awal pada tipe J
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFF0F172A),
-      body: Padding(
+  @override
+Widget build(BuildContext context) {
+  return Scaffold(
+    // BAGIAN BAWAH: Gelap (Navy Deep)
+    backgroundColor: const Color(0xFF0F172A), 
+    
+    appBar: AppBar(
+      // BAGIAN ATAS: Terang (Slate Clean)
+      backgroundColor: const Color(0xFFF8FAFC), 
+      title: const Text(
+      "INPUT REPS", 
+        style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Color(0xFF1E293B))
+      ), 
+      elevation: 0,
+      centerTitle: true,
+      // PANAH BACK: Terlihat jelas di latar terang
+      iconTheme: const IconThemeData(color: Color(0xFF1E293B)), 
+    ),
+     body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: SingleChildScrollView(
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -1579,9 +1622,23 @@ class _InputLatihanDurasiPageState extends State<InputLatihanDurasiPage> {
   String _selectedTipePembagi = 'J'; // Default awal pada tipe J
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFF0F172A),
+Widget build(BuildContext context) {
+  return Scaffold(
+    // BAGIAN BAWAH: Gelap (Navy Deep)
+    backgroundColor: const Color(0xFF0F172A), 
+    
+    appBar: AppBar(
+      // BAGIAN ATAS: Terang (Slate Clean)
+      backgroundColor: const Color(0xFFF8FAFC), 
+      title: const Text(
+        "INPUT LAMA WAKTU", 
+        style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Color(0xFF1E293B))
+      ), 
+      elevation: 0,
+      centerTitle: true,
+      // PANAH BACK: Terlihat jelas di latar terang
+      iconTheme: const IconThemeData(color: Color(0xFF1E293B)), 
+    ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: SingleChildScrollView(
