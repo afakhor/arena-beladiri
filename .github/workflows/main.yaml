@@ -1,9 +1,9 @@
-name: Build
-on:
-  push:
-    branches: [main, master]
-  workflow_dispatch:
-jobs:
+#name: Build
+#on:
+  #push:
+    #branches: [main, master]
+  #workflow_dispatch:
+#jobs:
   #build:
     #runs-on: ubuntu-latest
     #steps:
@@ -34,14 +34,14 @@ jobs:
     #- run: |
         #dart run \
         #flutter_native_splash:create
-    #- run: flutter build apk --release
+    - run: flutter build apk --release
     #- run: |
         #cd build/app/outputs/flutter-apk
         #cp app-release.apk $GITHUB_WORKSPACE
-    #- uses: actions/upload-artifact@v4
-      #with:
-        #name: Arena-Beladiri-APK
-        #path: app-release.apk
+    - uses: actions/upload-artifact@v4
+      with:
+        name: Arena-Beladiri-APK
+        path: app-release.apk
 #cara edit widget home screen widget
 # 1. Masuk ke folder proyek Coach (sesuaikan nama foldernya jika berbeda)
 cd arena-beladiri
