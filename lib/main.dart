@@ -864,7 +864,7 @@ Widget build(BuildContext context) {
       // BAGIAN ATAS: Terang (Slate Clean)
       backgroundColor: const Color(0xFFF8FAFC), 
       title: const Text(
-        PAPAN PERFORMA", 
+        "PAPAN PERFORMA", 
         style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Color(0xFF1E293B))
       ), 
       elevation: 0,
