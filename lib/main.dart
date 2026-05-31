@@ -967,7 +967,7 @@ Widget build(BuildContext context) {
                     ],
                   ),
                   const SizedBox(height: 12),
-                  METRIKS RADAR (10 DIMENSI)',
+                  'METRIKS RADAR (10 DIMENSI)',
                         style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Color(0xFF22C55E)),
                       ),
                     ],
