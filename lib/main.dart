@@ -857,33 +857,26 @@ class DashboardAtletPage extends StatelessWidget {
     required this.dapatkanBoxIndexFunc
   }) : super(key: key);
 
-
-
-
-
   @override
-Widget build(BuildContext context) {
-  return Scaffold(
-    // BAGIAN BAWAH: Gelap (Navy Deep)
-    backgroundColor: const Color(0xFF0F172A), 
-    
-    appBar: AppBar(
-      // BAGIAN ATAS: Terang (Slate Clean)
-      backgroundColor: const Color(0xFFF8FAFC), 
-      title: const Text(
-        "PAPAN PERFORMA", 
-        style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Color(0xFF1E293B))
-      ), 
-      elevation: 0,
-      centerTitle: true,
-      // PANAH BACK: Terlihat jelas di latar terang
-      iconTheme: const IconThemeData(color: Color(0xFF1E293B)), 
-    ),
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFF0F172A), // Navy Deep
+      appBar: AppBar(
+        backgroundColor: const Color(0xFFF8FAFC), // Slate Clean
+        title: const Text(
+          "PAPAN PERFORMA", 
+          style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Color(0xFF1E293B))
+        ), 
+        elevation: 0,
+        centerTitle: true,
+        iconTheme: const IconThemeData(color: Color(0xFF1E293B)), 
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // ==================== KARTU PROFIL ATLET ====================
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(16),
@@ -918,6 +911,7 @@ Widget build(BuildContext context) {
             ),
             const SizedBox(height: 16),
 
+            // ==================== GRAFIK BOXPLOT ====================
             Container(
               width: double.infinity,
               decoration: BoxDecoration(
@@ -941,17 +935,18 @@ Widget build(BuildContext context) {
                   ),
                   const SizedBox(height: 16),
                   SizedBox(
-  height: 250, 
-  child: MetaBoxplotChart(
-    boxData: activeMurid.boxData, 
-    teamAverages: teamBoxAverages,
-  ),
-),
+                    height: 250, 
+                    child: MetaBoxplotChart(
+                      boxData: activeMurid.boxData, 
+                      teamAverages: teamBoxAverages,
+                    ),
+                  ),
                 ],
               ),
             ),
             const SizedBox(height: 16),
 
+            // ==================== GRAFIK RADAR (FIXED & BERSIH) ====================
             Container(
               width: double.infinity,
               decoration: BoxDecoration(
@@ -974,20 +969,11 @@ Widget build(BuildContext context) {
                     ],
                   ),
                   const SizedBox(height: 12),
-                  'METRIKS RADAR (10 DIMENSI)',
-                        style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Color(0xFF22C55E)),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 12),
-  SizedBox(
-  height: 320, // Dinaikkan sedikit agar muat dengan teks legenda di bawahnya
-  child: MetaRadarChart(
-    dataIndividu: activeMurid.radarData, 
-    rataRataTim: teamRadarAverages,
-  ),
-),
-                      painter: MetaRadarChartPainter(activeRadar: activeMurid.radarData, teamRadar: teamRadarAverages),
+                  SizedBox(
+                    height: 320, 
+                    child: MetaRadarChart(
+                      dataIndividu: activeMurid.radarData, 
+                      rataRataTim: teamRadarAverages,
                     ),
                   ),
                 ],
@@ -995,6 +981,7 @@ Widget build(BuildContext context) {
             ),
             const SizedBox(height: 16),
 
+            // ==================== TABEL MATRIKS ANALISIS GERAK ====================
             Container(
               width: double.infinity,
               decoration: BoxDecoration(
@@ -1084,7 +1071,6 @@ Widget build(BuildContext context) {
     );
   }
 
-  // NAMA METHOD DISESUAIKAN MENJADI_analisisKomplet40Pola AGAR COCOK DENGAN PANGGILAN DI TABLE
   Map<String, String> _analisisKomplet40Pola(int idx, String namaKomponen) {
     if (idx >= activeMurid.boxData.length || activeMurid.boxData[idx].length < 6) {
       return {"pola": "-", "arti": "Data fungsional belum lengkap."};
@@ -1094,7 +1080,7 @@ Widget build(BuildContext context) {
     double min = data[0]; 
     double q1 = data[1]; 
     double q2 = data[2]; 
-    double q3 = data[4]; // Sesuai indeks data Coach
+    double q3 = data[4]; 
     double max = data[5];
 
     double dLower = q2 - q1; 
@@ -1106,7 +1092,6 @@ Widget build(BuildContext context) {
     String skew = ""; 
     String kurtosis = "";
 
-    // 1. PENENTUAN BENTUK KEMIRINGAN (SKEWNESS)
     if ((dUpper - dLower).abs() <= 2.0 && (wUpper - wLower).abs() <= 3.0) {
       skew = "Symmetrical";
     } else if (dUpper > dLower && wUpper > wLower) {
@@ -1119,7 +1104,6 @@ Widget build(BuildContext context) {
       skew = "Mildly Skewed Left";
     }
 
-    // 2. PENENTUAN BENTUK KERAPATAN (KURTOSIS)
     if (iqr < 10) {
       kurtosis = "Leptokurtic (Narrow)";
     } else if (iqr > 38) {
@@ -1128,7 +1112,6 @@ Widget build(BuildContext context) {
       kurtosis = "Mesokurtic (Optimal)";
     }
 
-    // 3. LOGIKA SPORT SCIENCE
     String artiFisik = "";
     if (skew == "Symmetrical") {
       if (kurtosis == "Mesokurtic (Optimal)") {
@@ -1144,7 +1127,7 @@ Widget build(BuildContext context) {
       } else if (kurtosis == "Leptokurtic (Narrow)") {
         artiFisik = "Perkembangan lambat tapi pasti. Pertahankan volume latihan sirkuit.";
       } else { 
-        artiFisik = "Adaptasi tak merata. Ada potensi, tapi teknik eksekusi masih goyah.";
+        artiFisik = "Adaptasi tak merata. Ada potensi, tapi teknik eksekusi masih gogah.";
       }
     } else if (skew == "Extremely Skewed Right") {
       if (kurtosis == "Mesokurtic (Optimal)") {
@@ -1175,13 +1158,12 @@ Widget build(BuildContext context) {
     return {"pola": "$skew\n($kurtosis)", "arti": artiFisik};
   }
 
-   TableRow _buildEvaluasiRow(String namaKomponen, String tipeGrafik, int dataIdx) {
+  TableRow _buildEvaluasiRow(String namaKomponen, String tipeGrafik, int dataIdx) {
     bool diAtasRataTim = false; 
     bool belumAdaData = true; 
     String labelPola = "-"; 
     String labelArti = "-";
 
-    // Peta Kalimat Dinamis (AI Engine Alternatif)
     String kelebihanText = "";
     String kekuranganText = "";
     String rekomendasiText = "";
@@ -1200,10 +1182,8 @@ Widget build(BuildContext context) {
         belumAdaData = false;
         diAtasRataTim = activeMurid.boxData[dataIdx][3] >= (dataIdx < teamBoxAverages.length ? teamBoxAverages[dataIdx] : 0.0);
 
-        // AMBIL VARIABEL UNTUK GENERATOR TEKS DINAMIS
         String polaString = labelPola.toUpperCase();
 
-        // A. GENERATOR KELEBIHAN (DINAMIS BERDASARKAN REAL-TIME DATA)
         if (diAtasRataTim) {
           kelebihanText = "Unggul di kelas. Power output melompat di atas standar tim.";
           if (polaString.contains("SYMMETRICAL")) {
@@ -1218,7 +1198,6 @@ Widget build(BuildContext context) {
           }
         }
 
-        // B. GENERATOR KEKURANGAN (DINAMIS BERDASARKAN AMBANG BATAS CRITICAL)
         if (!diAtasRataTim) {
           kekuranganText = "Defisit volume target. Kalah saing secara output dari rata-rata tim.";
           if (polaString.contains("LEFT")) {
@@ -1233,7 +1212,6 @@ Widget build(BuildContext context) {
           }
         }
 
-        // C. GENERATOR REKOMENDASI TAKTIS (FORMULA AI COACHING)
         if (polaString.contains("LEFT") && polaString.contains("NARROW")) {
           rekomendasiText = "EMERGENCY REMEDIAL! Hentikan sirkuit, drill ulang teknik dasar dasar.";
         } else if (polaString.contains("LEFT")) {
@@ -1249,7 +1227,6 @@ Widget build(BuildContext context) {
         }
       }
     } else {
-      // UNTUK GRAFIK RADAR (AGILITY, MOBILITY, OPEN AGILITY)
       if (adaDataDiInput && dataIdx < activeMurid.radarData.length) {
         belumAdaData = false;
         diAtasRataTim = activeMurid.radarData[dataIdx] >= (dataIdx < teamRadarAverages.length ? teamRadarAverages[dataIdx] : 0.0);
@@ -1266,7 +1243,6 @@ Widget build(BuildContext context) {
       }
     }
 
-    // PROTEKSI DATA JIKA MASIH KOSONG
     if (belumAdaData) {
       kelebihanText = "Data rekam kosong.";
       kekuranganText = "Menunggu uji fisik.";
@@ -1281,12 +1257,10 @@ Widget build(BuildContext context) {
         Padding(padding: const EdgeInsets.all(8.0), child: Text(kelebihanText, style: const TextStyle(fontSize: 8.5, color: Colors.white70))),
         Padding(padding: const EdgeInsets.all(8.0), child: Text(kekuranganText, style: const TextStyle(fontSize: 8.5, color: Colors.white70))),
         Padding(padding: const EdgeInsets.all(8.0), child: Text(rekomendasiText, style: const TextStyle(fontSize: 8.5, color: Color(0xFF38BDF8), fontWeight: FontWeight.w500))),
-       ],
-    ); // <--- Penutup TableRow
-  } // <--- Penutup fungsi _buildEvaluasiRow
-
-} // <--- PENUTUP UTAMA CLASS DI SINI YANG SERING HILANG!
-
+      ],
+    ); 
+  } 
+}
 
 // ==================== HALAMAN 5: HISTORY TIMELINE ====================
 class TimelineHistoryPage extends StatelessWidget {
