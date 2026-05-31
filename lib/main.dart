@@ -23,6 +23,13 @@ void main() {
 }
 
 // --- INI CLASS BARU UNTUK HOMESCREEN WIDGET ---
+class ArenaBeladiriApp extends StatefulWidget {
+  @override
+  _ArenaBeladiriAppState createState() => _ArenaBeladiriAppState();
+}
+
+
+
 class _ArenaBeladiriAppState extends State<ArenaBeladiriApp> {
   // Data 20 murid Coach (misal: skor push-up)
   List<double> dataMurid = List.filled(20, 0.0); 
