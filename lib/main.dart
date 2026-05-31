@@ -22,67 +22,11 @@ void main() {
 
 }
 
-// --- INI CLASS BARU UNTUK HOMESCREEN WIDGET ---
-class ArenaBeladiriApp extends StatefulWidget {
-  @override
-  _ArenaBeladiriAppState createState() => _ArenaBeladiriAppState();
-}
 
 
 
-class _ArenaBeladiriAppState extends State<ArenaBeladiriApp> {
-  // Data 20 murid Coach (misal: skor push-up)
-  List<double> dataMurid = List.filled(20, 0.0); 
 
-  // PINDAHKAN: Fungsi ini sekarang ada di dalam State agar bisa dipanggil tombol
-    Future<void> jalankanUpdateDashboard() async {
-    try {
-      await HomeWidget.saveWidgetData('judul_dashboard', 'Monitoring 20 Murid');
 
-      // 1. Kirim grafik Boxplot menggunakan dataMurid asli Coach
-      await HomeWidget.renderFlutterWidget(
-        MetaBoxplotChart(
-          // Menggunakan data asli murid Coach. Jika kosong, grafik akan merespons 0
-          boxData: [dataMurid], 
-          teamAverages: dataMurid, // Rata-rata tim diambil dari deret data asli
-        ), 
-        key: 'img_boxplot', 
-        logicalSize: const Size(400, 400),
-      );
-
-      // 2. Kirim grafik Radar menggunakan dataMurid asli Coach
-      await HomeWidget.renderFlutterWidget(
-        MetaRadarChart(
-          dataIndividu: dataMurid, 
-          rataRataTim: dataMurid,
-        ),
-        key: 'img_radar', 
-        logicalSize: const Size(400, 400),
-      );
-
-      await HomeWidget.updateWidget(
-        name: 'MyWidgetProvider',
-        androidName: 'MyWidgetProvider',
-      );
-    } catch (e) {
-      debugPrint("Gagal update widget: $e");
-    }
-  }
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text("PAPAN PERFORMA BIOMOTORIK")),
-      body: Center(
-        child: Text("Data Terinput: ${dataMurid.length} Murid"),
-      ),
-      floatingActionButton: FloatingActionButton(
-        // GANTI: Panggil fungsi update dashboard di sini
-        onPressed: () => jalankanUpdateDashboard(), 
-        child: Icon(Icons.sync), // Ikon sinkronisasi
-      ),
-    );
-  }
-}
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
