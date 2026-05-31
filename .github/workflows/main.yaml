@@ -30,7 +30,7 @@ jobs:
     - name: Set Android Bundle ID
       run: |
         dart run rename setBundleId \
-        --value "com.bskrwingchun.hpki" \
+        --value "com.heruwingchun.hpki" \
         --targets android
 
     - name: Build APK
@@ -39,5 +39,5 @@ jobs:
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
-        name: Arena-Beladiri-APK
+        name: Zona-Beladiri-APK
         path: build/app/outputs/flutter-apk/app-release.apk
