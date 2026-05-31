@@ -33,7 +33,7 @@ jobs:
         --value "com.heruwingchun.hpki" \
         --targets android
 
-        - name: Build APK
+    - name: Build APK
       run: flutter build apk --release --no-tree-shake-icons
 
     - name: Upload APK
