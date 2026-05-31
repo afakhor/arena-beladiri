@@ -1,18 +1,20 @@
-package com.example.arena_beladiri;
+package com.example.arena_beladiri; // Sesuaikan dengan paket bawaan file
 
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.widget.RemoteViews;
 
+// --- TAMBAHKAN BARIS IMPORT KRITIS INI ---
+import com.bskrwingchun.hpki.R; 
+// -----------------------------------------
+
 public class MyWidgetProvider extends AppWidgetProvider {
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         for (int appWidgetId : appWidgetIds) {
-            // Menghubungkan ke layout dashboard (XML) yang Coach buat tadi
+            // Sekarang sistem tahu persis letak R.layout.widget_layout berada!
             RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
-            
-            // Nantinya di sini kita masukkan logika pengiriman grafik dari Flutter
             appWidgetManager.updateAppWidget(appWidgetId, views);
         }
     }
