@@ -35,31 +35,39 @@ class _ArenaBeladiriAppState extends State<ArenaBeladiriApp> {
   List<double> dataMurid = List.filled(20, 0.0); 
 
   // PINDAHKAN: Fungsi ini sekarang ada di dalam State agar bisa dipanggil tombol
-  Future<void> jalankanUpdateDashboard() async {
-    // 1. Simpan judul atau teks tambahan jika perlu
-    await HomeWidget.saveWidgetData('judul_dashboard', 'Monitoring 20 Murid');
+    Future<void> jalankanUpdateDashboard() async {
+    try {
+      await HomeWidget.saveWidgetData('judul_dashboard', 'Monitoring 20 Murid');
 
-    // 2. Kirim grafik Boxplot ke sisi kiri widget
-    await HomeWidget.renderFlutterWidget(
-      MetaBoxplotChart(data: dataMurid), 
-      key: 'img_boxplot', // Sesuai dengan ID di XML kita tadi
-      logicalSize: const Size(400, 400),
-    );
+      // 1. Kirim grafik Boxplot menggunakan dataMurid asli Coach
+      await HomeWidget.renderFlutterWidget(
+        MetaBoxplotChart(
+          // Menggunakan data asli murid Coach. Jika kosong, grafik akan merespons 0
+          boxData: [dataMurid], 
+          teamAverages: dataMurid, // Rata-rata tim diambil dari deret data asli
+        ), 
+        key: 'img_boxplot', 
+        logicalSize: const Size(400, 400),
+      );
 
-    // 3. Kirim grafik Radar ke sisi kanan widget
-    await HomeWidget.renderFlutterWidget(
-      MetaRadarChart(data: dataMurid),
-      key: 'img_radar', // Sesuai dengan ID di XML kita tadi
-      logicalSize: const Size(400, 400),
-    );
+      // 2. Kirim grafik Radar menggunakan dataMurid asli Coach
+      await HomeWidget.renderFlutterWidget(
+        MetaRadarChart(
+          dataIndividu: dataMurid, 
+          rataRataTim: dataMurid,
+        ),
+        key: 'img_radar', 
+        logicalSize: const Size(400, 400),
+      );
 
-    // 4. Perintahkan sistem Android untuk merefresh tampilan Dashboard
-    await HomeWidget.updateWidget(
-      name: 'MyWidgetProvider',
-      androidName: 'MyWidgetProvider',
-    );
+      await HomeWidget.updateWidget(
+        name: 'MyWidgetProvider',
+        androidName: 'MyWidgetProvider',
+      );
+    } catch (e) {
+      debugPrint("Gagal update widget: $e");
+    }
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
