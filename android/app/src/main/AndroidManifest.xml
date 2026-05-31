@@ -1,12 +1,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.bskrwingchun.hpki"> <!-- Pastikan ini sesuai -->
+    package="com.heruwingchun.hpki"> <!-- Identitas Baru -->
 
     <application
-        android:label="Arena Beladiri"
+        android:label="Zona Beladiri" 
         android:icon="@mipmap/ic_launcher">
         
-        <!-- BAGIAN INI SANGAT KRITIS -->
-        <receiver android:name="com.bskrwingchun.hpki.MyWidgetProvider"
+        <!-- Alamat Provider Widget harus lengkap -->
+        <receiver android:name="com.heruwingchun.hpki.MyWidgetProvider"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -17,13 +17,19 @@
         </receiver>
 
         <activity
-            android:name=".MainActivity"
+            android:name="com.heruwingchun.hpki.MainActivity"
             android:exported="true"
             android:launchMode="singleTop"
             android:theme="@style/LaunchTheme"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:hardwareAccelerated="true"
             android:windowSoftInputMode="adjustResize">
+            
+            <!-- Tambahkan ini untuk memperbaiki error v1 embedding -->
+            <meta-data
+                android:name="flutterEmbedding"
+                android:value="2" />
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
