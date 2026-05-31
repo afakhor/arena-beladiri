@@ -1,4 +1,4 @@
-package com.example.arena_beladiri;
+package com.bskrwingchun.hpki; // Harus sama persis dengan Bundle ID di Workflow;
 
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
