@@ -1,7 +1,20 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.bskrwingchun.hpki"> <!-- Pastikan ini sesuai -->
+
     <application
         android:label="Arena Beladiri"
         android:icon="@mipmap/ic_launcher">
+        
+        <!-- BAGIAN INI SANGAT KRITIS -->
+        <receiver android:name="com.bskrwingchun.hpki.MyWidgetProvider"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/my_widget_info" />
+        </receiver>
 
         <activity
             android:name=".MainActivity"
@@ -11,30 +24,10 @@
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:hardwareAccelerated="true"
             android:windowSoftInputMode="adjustResize">
-            
-            <!-- Meta-data ini yang memberitahu sistem bahwa kita pakai v2 -->
-            <meta-data
-                android:name="flutterEmbedding"
-                android:value="2" />
-                
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-
-        <!-- Kode Widget Coach tetap di sini -->
-        <receiver 
-            android:name=".MyWidgetProvider" 
-            android:exported="true"
-            android:label="Arena Beladiri Wingchun.Hapki">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-            </intent-filter>
-            <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/widget_info" />
-        </receiver>
-
     </application>
 </manifest>
